@@ -25,38 +25,35 @@ const categories = [
   { id: "ai", label: "Artificial Intelligence" },
 ];
 
-
 const Filter = ({ handleFilterChange }) => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [sortByPrice, setSortByPrice] = useState("");
+
   const handleCategoryChange = (categoryId) => {
     setSelectedCategories((prevCategories) => {
       const newCategories = prevCategories.includes(categoryId)
         ? prevCategories.filter((id) => id !== categoryId)
         : [...prevCategories, categoryId];
 
-          handleFilterChange(newCategories, sortByPrice);
-          return newCategories;
+      handleFilterChange(newCategories, sortByPrice);
+      return newCategories;
     });
-  
-
   };
-
-
 
   const selectByPriceHandler = (selectedValue) => {
     setSortByPrice(selectedValue);
     handleFilterChange(selectedCategories, selectedValue);
   };
 
-
-
   return (
-    <div className="w-full md:w-[20%]">
-      <div className="flex items-center justify-between">
-        <h1 className="font-semibold text-lg md:text-xl">Filter Options</h1>
+    <div className="w-full md:w-[250px] bg-white dark:bg-[#1e1e1e] p-4 rounded-lg shadow-sm">
+      {/* Header + Sort */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <h1 className="font-semibold text-lg text-gray-800 dark:text-white">
+          Filter Options
+        </h1>
         <Select onValueChange={selectByPriceHandler}>
-          <SelectTrigger>
+          <SelectTrigger className="w-full sm:w-auto border border-gray-400 dark:border-gray-600 rounded-md px-3 py-2 focus:outline-none">
             <SelectValue placeholder="Sort By" />
           </SelectTrigger>
           <SelectContent>
@@ -68,20 +65,30 @@ const Filter = ({ handleFilterChange }) => {
           </SelectContent>
         </Select>
       </div>
+
       <Separator className="my-4" />
+
+      {/* Category Filter */}
       <div>
-        <h1 className="font-semibold mb-2">Category</h1>
-        {categories.map((category) => (
-          <div className="flex items-center space-x-4 space-y-2 my-2">
-            <Checkbox
-              id={category.id}
-              onCheckedChange={() => handleCategoryChange(category.id)}
-            />
-            <Label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-              {category.label}
-            </Label>
-          </div>
-        ))}
+        <h1 className="font-semibold text-gray-800 dark:text-white mb-2">
+          Category
+        </h1>
+        <div className="flex flex-col gap-2">
+          {categories.map((category) => (
+            <div key={category.id} className="flex items-center gap-3">
+              <Checkbox
+                id={category.id}
+                onCheckedChange={() => handleCategoryChange(category.id)}
+              />
+              <Label
+                htmlFor={category.id}
+                className="text-sm text-gray-700 dark:text-gray-300"
+              >
+                {category.label}
+              </Label>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

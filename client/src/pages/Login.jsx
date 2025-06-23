@@ -15,15 +15,11 @@ import {
   useRegisterUserMutation,
   useLoginUserMutation,
 } from "@/features/api/authApi";
-
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
-
 const Login = () => {
-  //to get the input we have to create state variables
-
   const [loginInput, setLoginInput] = useState({
     email: "",
     password: "",
@@ -44,6 +40,7 @@ const Login = () => {
       isSuccess: registerIsSuccess,
     },
   ] = useRegisterUserMutation();
+
   const [
     loginUser,
     {
@@ -55,14 +52,10 @@ const Login = () => {
   ] = useLoginUserMutation();
 
   const navigate = useNavigate();
-
-  //now we have to create change handler to receive the event
-  //rather than using two change handlers for login and signup,
-  //  we can use a single change handler
+  const [currentAction, setCurrentAction] = useState(null);
 
   const changeInputHandler = (e, type) => {
     const { name, value } = e.target;
-
     if (type === "signup") {
       setSignupInput({ ...signupInput, [name]: value });
     } else {
@@ -70,169 +63,168 @@ const Login = () => {
     }
   };
 
-  //now we have to write a function to handle the form submission
-  //we will get all the data from the state variables
-  //  and send it to the backend later
-
- const handleRegistration = async (type) => {
-  const inputData = type === "signup" ? signupInput : loginInput;
-  const action = type === "signup" ? registerUser : loginUser;
-
-  // console.log("Sending data:", inputData);
-  // console.log("Login Input:", loginInput);
-  setCurrentAction(type);
-  await action(inputData);
-};
-
-
-  const [currentAction, setCurrentAction] = useState(null); // "signup" or "login"
-
-
+  const handleRegistration = async (type) => {
+    const inputData = type === "signup" ? signupInput : loginInput;
+    const action = type === "signup" ? registerUser : loginUser;
+    setCurrentAction(type);
+    await action(inputData);
+  };
 
   useEffect(() => {
-  if (currentAction === "signup") {
-    if (registerIsSuccess && registerData) {
-      toast.success(registerData.message || "Signup successful✅");
-      setSignupInput({ name: "", email: "", password: "" });
+    if (currentAction === "signup") {
+      if (registerIsSuccess && registerData) {
+        toast.success(registerData.message || "Signup successful✅");
+        setSignupInput({ name: "", email: "", password: "" });
+      }
+      if (!registerIsLoading && !registerIsSuccess && registerError) {
+        toast.error(registerError.data?.message || "Signup failed❌");
+      }
     }
 
-    if (!registerIsLoading && !registerIsSuccess && registerError) {
-      toast.error(registerError.data?.message || "Signup failed❌");
-    }
-  }
-
-  if (currentAction === "login") {
-    if (loginIsSuccess && loginData) {
-      toast.success(loginData.message || "Login successful✅");
-      setLoginInput({ email: "", password: "" });
+    if (currentAction === "login") {
+      if (loginIsSuccess && loginData) {
+        toast.success(loginData.message || "Login successful✅");
+        setLoginInput({ email: "", password: "" });
         navigate("/");
+      }
+      if (!loginIsLoading && !loginIsSuccess && loginError) {
+        toast.error(loginError.data?.message || "Login failed❌");
+      }
     }
-
-    if (!loginIsLoading && !loginIsSuccess && loginError) {
-      toast.error(loginError.data?.message || "Login failed❌");
-    }
-  } 
-}, [
-  currentAction,
-  registerIsSuccess,
-  registerData,
-  registerError,
-  registerIsLoading,
-  loginIsSuccess,
-  loginData,
-  loginError,
-  loginIsLoading,
-]);
-
-
+  }, [
+    currentAction,
+    registerIsSuccess,
+    registerData,
+    registerError,
+    registerIsLoading,
+    loginIsSuccess,
+    loginData,
+    loginError,
+    loginIsLoading,
+  ]);
 
   return (
-    <div className="flex items-center justify-center h-screen mt-20">
-      <Tabs defaultValue="login" className="w-[400px]">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="signup">SignUp</TabsTrigger>
-          <TabsTrigger value="login">Login</TabsTrigger>
-        </TabsList>
-        <TabsContent value="signup">
-          <Card>
-            <CardHeader>
-              <CardTitle>SignUp</CardTitle>
-              <CardDescription>Create a New Account.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="space-y-1">
-                <Label htmlFor="name">Name</Label>
-                <Input
-                  onChange={(e) => changeInputHandler(e, "signup")}
-                  name="name"
-                  value={signupInput.name}
-                  type="text"
-                  placeholder="Eg. Aryan Talekar"
-                  required={true}
-                />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  onChange={(e) => changeInputHandler(e, "signup")}
-                  name="email"
-                  value={signupInput.email}
-                  type="email"
-                  placeholder="Eg. aryantalekar@gmail.com"
-                  required={true}
-                />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="name">Password</Label>
-                <Input
-                  onChange={(e) => changeInputHandler(e, "signup")}
-                  name="password"
-                  value={signupInput.password}
-                  type="password"
-                  placeholder="Eg .aryan@T123"
-                  required={true}
-                />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button disabled={registerIsLoading} onClick={() => handleRegistration("signup")}>
-                {
-                  registerIsLoading ? (
+    <section className="min-h-screen flex items-center justify-center bg-[#0F172A] dark:bg-black px-4 py-20">
+      <div className="w-full max-w-md bg-white dark:bg-[#1E1E1E] rounded-xl shadow-lg p-6 sm:p-8">
+        <Tabs defaultValue="login" className="w-full">
+          <TabsList className="grid grid-cols-2 w-full mb-4">
+            <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            <TabsTrigger value="login">Login</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="signup">
+            <Card className="bg-transparent border-none shadow-none">
+              <CardHeader>
+                <CardTitle className="text-xl text-gray-800 dark:text-white">Sign Up</CardTitle>
+                <CardDescription className="dark:text-gray-400">
+                  Create a new account.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-1">
+                  <Label htmlFor="name">Name</Label>
+                  <Input
+                    onChange={(e) => changeInputHandler(e, "signup")}
+                    name="name"
+                    value={signupInput.name}
+                    type="text"
+                    placeholder="Eg. Aryan Talekar"
+                    required
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    onChange={(e) => changeInputHandler(e, "signup")}
+                    name="email"
+                    value={signupInput.email}
+                    type="email"
+                    placeholder="Eg. aryantalekar@gmail.com"
+                    required
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="password">Password</Label>
+                  <Input
+                    onChange={(e) => changeInputHandler(e, "signup")}
+                    name="password"
+                    value={signupInput.password}
+                    type="password"
+                    placeholder="Eg. aryan@T123"
+                    required
+                  />
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button
+                  disabled={registerIsLoading}
+                  onClick={() => handleRegistration("signup")}
+                  className="w-full"
+                >
+                  {registerIsLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait...
                     </>
-                  ):"Signup"
-                }
-              </Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
+                  ) : (
+                    "Sign Up"
+                  )}
+                </Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
 
-        <TabsContent value="login">
-          <Card>
-            <CardHeader>
-              <CardTitle>Login</CardTitle>
-              <CardDescription>Login to your Account.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="space-y-1">
-                <Label htmlFor="current">Email</Label>
-                <Input
-                  onChange={(e) => changeInputHandler(e, "login")}
-                  name="email"
-                  value={loginInput.email}
-                  type="email"
-                  placeholder="Eg. aryantalekar@gmail.com"
-                  required={true}
-                />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="new">Password</Label>
-                <Input
-                  name="password"
-                  value={loginInput.password}
-                  onChange={(e) => changeInputHandler(e, "login")}
-                  type="password"
-                  placeholder="Eg .aryan@T123"
-                  required={true}
-                />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button disabled={loginIsLoading} onClick={() => handleRegistration("login")}>
-                {
-                  loginIsLoading ? (
+          <TabsContent value="login">
+            <Card className="bg-transparent border-none shadow-none">
+              <CardHeader>
+                <CardTitle className="text-xl text-gray-800 dark:text-white">Login</CardTitle>
+                <CardDescription className="dark:text-gray-400">
+                  Log in to your account.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-1">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    onChange={(e) => changeInputHandler(e, "login")}
+                    name="email"
+                    value={loginInput.email}
+                    type="email"
+                    placeholder="Eg. aryantalekar@gmail.com"
+                    required
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="password">Password</Label>
+                  <Input
+                    name="password"
+                    value={loginInput.password}
+                    onChange={(e) => changeInputHandler(e, "login")}
+                    type="password"
+                    placeholder="Eg. aryan@T123"
+                    required
+                  />
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button
+                  disabled={loginIsLoading}
+                  onClick={() => handleRegistration("login")}
+                  className="w-full"
+                >
+                  {loginIsLoading ? (
                     <>
-                      <Loader2 className='mr-2 h-4 w-4 animate-spin ' />  Please Wait...
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait...
                     </>
-                  ): "Login"
-                }
-              </Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
+                  ) : (
+                    "Login"
+                  )}
+                </Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </section>
   );
 };
 

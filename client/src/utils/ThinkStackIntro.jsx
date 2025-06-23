@@ -1,24 +1,22 @@
 import React from "react";
 import {
-  RocketIcon,
   TimerIcon,
   PlayCircleIcon,
   BookOpenIcon,
   UserCheckIcon,
-  GraduationCapIcon,
 } from "lucide-react";
 
 const ThinkStackIntro = () => {
   return (
     <section className="bg-gray-50 dark:bg-[#1a1a1a] py-20 px-6">
-      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         {/* Text Content */}
         <div>
-          <h2 className="text-4xl font-extrabold mb-6 text-gray-900 dark:text-white leading-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 text-gray-900 dark:text-white leading-tight">
             Empower Your Learning with{" "}
             <span className="text-purple-600">ThinkStack</span>
           </h2>
-          <p className="text-lg text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+          <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
             ThinkStack is a modern learning platform that brings structure to
             online education. Whether you're a student or instructor, ThinkStack
             simplifies the journey — from course creation to completion.
@@ -31,7 +29,6 @@ const ThinkStackIntro = () => {
               title="All-in-One Learning Hub"
               description="Browse and watch curated educational videos with a clean course-like experience."
             />
-
             <Feature
               icon={<UserCheckIcon className="h-5 w-5 text-purple-600" />}
               title="Instructor Dashboard"
@@ -50,12 +47,12 @@ const ThinkStackIntro = () => {
           </div>
         </div>
 
-        {/* Image or Illustration */}
-        <div className="w-full flex justify-center md:justify-end">
+        {/* Illustration */}
+        <div className="flex justify-center md:justify-end">
           <img
             src="./illustration.jpg"
             alt="ThinkStack UI Mockup"
-            className="max-w-md w-full rounded-full shadow-2xl"
+            className="max-w-xs sm:max-w-sm md:max-w-md w-full rounded-full shadow-2xl"
           />
         </div>
       </div>
@@ -67,7 +64,9 @@ const Feature = ({ icon, title, description }) => (
   <div className="flex items-start gap-3">
     <div className="mt-1">{icon}</div>
     <div>
-      <h4 className="font-semibold text-gray-800 dark:text-white">{title}</h4>
+      <h4 className="font-semibold text-gray-800 dark:text-white">
+        {title}
+      </h4>
       <p className="text-sm text-gray-600 dark:text-gray-400">{description}</p>
     </div>
   </div>

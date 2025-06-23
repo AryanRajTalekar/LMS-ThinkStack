@@ -1,12 +1,22 @@
-import { RouterProvider } from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { ThemeProvider } from "./components/ThemeProvider.jsx";
+
+// Layouts & UI
 import MainLayout from "./layout/MainLayout.jsx";
+import Navbar from "./utils/Navbar.jsx";
+import Footer from "./utils/Footer.jsx";
+
+// Pages (Student)
 import Login from "./pages/Login.jsx";
 import HeroSection from "./pages/Student/HeroSection.jsx";
-import Navbar from "./utils/Navbar.jsx";
-import { BrowserRouter, createBrowserRouter } from "react-router-dom";
 import Courses from "./pages/Student/Courses.jsx";
 import MyLearning from "./pages/Student/MyLearning.jsx";
 import Profile from "./pages/Student/Profile.jsx";
+import CourseDetail from "./pages/Student/CourseDetail.jsx";
+import CourseProgress from "./pages/Student/CourseProgress.jsx";
+import SearchPage from "./pages/Student/SearchPage.jsx";
+
+// Pages (Admin)
 import SideBar from "./pages/Admin/SideBar.jsx";
 import CourseTable from "./pages/Admin/Course/CourseTable.jsx";
 import Dashboard from "./pages/Admin/Dashboard.jsx";
@@ -14,19 +24,19 @@ import AddCourse from "./pages/Admin/Course/AddCourse.jsx";
 import UpdateCourse from "./pages/Admin/Course/UpdateCourse.jsx";
 import CreateLecture from "./pages/Admin/Lecture/CreateLecture.jsx";
 import UpdateLecture from "./pages/Admin/Lecture/UpdateLecture.jsx";
-import CourseDetail from "./pages/Student/CourseDetail.jsx";
-import CourseProgress from "./pages/Student/CourseProgress.jsx";
-import SearchPage from "./pages/Student/SearchPage.jsx";
+
+// Components
+import About from "./utils/About.jsx";
+import ThinkStackIntro from "./utils/ThinkStackIntro.jsx";
+import CallToAction from "./utils/CallToAction.jsx";
+
+// Route Guards
 import {
   AdminRoute,
   AuthenticatedUser,
   ProtectedRoute,
 } from "./utils/ProtectedRoutes.jsx";
 import PurchaseCourseProtectedRoute from "./utils/PurchaseCourseProtectedRoute.jsx";
-import { ThemeProvider } from "./components/ThemeProvider.jsx";
-import About from "./utils/About.jsx";
-import Footer from "./utils/Footer.jsx";
-import ThinkStackIntro from "./utils/ThinkStackIntro.jsx";
 
 function App() {
   const appRouter = createBrowserRouter([
@@ -40,9 +50,10 @@ function App() {
             <>
               <HeroSection />
               <Courses />
-               <ThinkStackIntro />
-              <About/>
-               <Footer />
+              <ThinkStackIntro />
+              <CallToAction />
+              <About />
+              <Footer />
             </>
           ),
         },
@@ -101,8 +112,7 @@ function App() {
           ),
         },
 
-        //admin routes start from heree
-
+        // Admin Routes
         {
           path: "admin",
           element: (
@@ -111,44 +121,24 @@ function App() {
             </AdminRoute>
           ),
           children: [
-            {
-              path: "dashboard",
-              element: <Dashboard />,
-            },
-            {
-              path: "course",
-              element: <CourseTable />,
-            },
-            {
-              path: "course/create",
-              element: <AddCourse />,
-            },
-            {
-              path: "course/:courseId",
-              element: <UpdateCourse />,
-            },
-            {
-              path: "course/:courseId/lecture",
-              element: <CreateLecture />,
-            },
-            {
-              path: "course/:courseId/lecture/:lectureId",
-              element: <UpdateLecture />,
-            },
+            { path: "dashboard", element: <Dashboard /> },
+            { path: "course", element: <CourseTable /> },
+            { path: "course/create", element: <AddCourse /> },
+            { path: "course/:courseId", element: <UpdateCourse /> },
+            { path: "course/:courseId/lecture", element: <CreateLecture /> },
+            { path: "course/:courseId/lecture/:lectureId", element: <UpdateLecture /> },
           ],
         },
       ],
     },
   ]);
+
   return (
-    <>
-      <main>
-        <ThemeProvider>
-          <RouterProvider router={appRouter} />
-        </ThemeProvider>
-        
-      </main>
-    </>
+    <main>
+      <ThemeProvider>
+        <RouterProvider router={appRouter} />
+      </ThemeProvider>
+    </main>
   );
 }
 

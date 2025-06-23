@@ -1,4 +1,4 @@
-import { AlertCircle} from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import React, { useState } from "react";
 import Filter from "../../utils/Filter";
 import SearchResult from "../../utils/SearchResult";
@@ -8,41 +8,41 @@ import { Button } from "@/components/ui/button";
 import { useGetSearchCoursesQuery } from "@/features/api/courseApi";
 
 const SearchPage = () => {
-
-
-  const [searchParams]  = useSearchParams();
+  const [searchParams] = useSearchParams();
   const query = searchParams.get("query");
-  
+
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [sortByPrice, setSortByPrice] = useState("");
 
   const { data, isLoading } = useGetSearchCoursesQuery({
     searchQuery: query,
     categories: selectedCategories,
-    sortByPrice: sortByPrice
+    sortByPrice: sortByPrice,
   });
 
   const isEmpty = !isLoading && data?.courses.length === 0;
 
-
   const handleFilterChange = (categories, price) => {
     setSelectedCategories(categories);
     setSortByPrice(price);
-  }
+  };
   return (
-    <div className="max-w-7xl mx-auto p-4 md:p-8 mt-10">
-      <div className="my-6">
-        <h1 className="font-bold text-xl md:text-2xl">result for "{query}"</h1>
-        <p>
-          Showing results for {" "}
-          <span className="text-blue-800 font-bold italic">
-            "{query}"
-          </span>
-        </p>
-      </div>
+    <div className="max-w-7xl mx-auto p-4 md:p-8">
+      {query && (
+        <div className="my-6">
+          <h1 className="font-bold text-xl md:text-2xl">
+            Result for "{query}"
+          </h1>
+          <p>
+            Showing results for{" "}
+            <span className="text-blue-800 font-bold italic">"{query}"</span>
+          </p>
+        </div>
+      )}
+
       <div className="flex flex-col md:flex-row gap-10">
         <div>
-            <Filter  handleFilterChange={handleFilterChange}/>
+          <Filter handleFilterChange={handleFilterChange} />
         </div>
         <div className="flex-1">
           {isLoading ? (
@@ -52,7 +52,9 @@ const SearchPage = () => {
           ) : isEmpty ? (
             <CourseNotFound />
           ) : (
-            data?.courses?.map((course) => <SearchResult key={course._id} course={course} />)
+            data?.courses?.map((course) => (
+              <SearchResult key={course._id} course={course} />
+            ))
           )}
         </div>
       </div>
@@ -63,7 +65,7 @@ const SearchPage = () => {
 export default SearchPage;
 
 const CourseSkeleton = () => {
-   return (
+  return (
     <div className="flex-1 flex flex-col md:flex-row justify-between border-b border-gray-300 py-4">
       <div className="h-32 w-full md:w-64">
         <Skeleton className="h-full w-full object-cover" />
