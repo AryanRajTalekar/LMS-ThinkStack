@@ -2,8 +2,10 @@ import React from 'react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './components/ui/dropdown-menu'
 import { Moon, Sun } from 'lucide-react'
 import { Button } from './components/ui/button'
+import { useTheme } from './components/ThemeProvider'
 
 const ModeToggle = () => {
+  const {setTheme} = useTheme();
   return (
   
       <DropdownMenu>

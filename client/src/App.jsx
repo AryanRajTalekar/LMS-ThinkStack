@@ -3,10 +3,31 @@ import MainLayout from "./layout/MainLayout.jsx";
 import Login from "./pages/Login.jsx";
 import HeroSection from "./pages/Student/HeroSection.jsx";
 import Navbar from "./utils/Navbar.jsx";
-import { BrowserRouter,createBrowserRouter } from "react-router-dom";
+import { BrowserRouter, createBrowserRouter } from "react-router-dom";
 import Courses from "./pages/Student/Courses.jsx";
 import MyLearning from "./pages/Student/MyLearning.jsx";
 import Profile from "./pages/Student/Profile.jsx";
+import SideBar from "./pages/Admin/SideBar.jsx";
+import CourseTable from "./pages/Admin/Course/CourseTable.jsx";
+import Dashboard from "./pages/Admin/Dashboard.jsx";
+import AddCourse from "./pages/Admin/Course/AddCourse.jsx";
+import UpdateCourse from "./pages/Admin/Course/UpdateCourse.jsx";
+import CreateLecture from "./pages/Admin/Lecture/CreateLecture.jsx";
+import UpdateLecture from "./pages/Admin/Lecture/UpdateLecture.jsx";
+import CourseDetail from "./pages/Student/CourseDetail.jsx";
+import CourseProgress from "./pages/Student/CourseProgress.jsx";
+import SearchPage from "./pages/Student/SearchPage.jsx";
+import {
+  AdminRoute,
+  AuthenticatedUser,
+  ProtectedRoute,
+} from "./utils/ProtectedRoutes.jsx";
+import PurchaseCourseProtectedRoute from "./utils/PurchaseCourseProtectedRoute.jsx";
+import { ThemeProvider } from "./components/ThemeProvider.jsx";
+import About from "./utils/About.jsx";
+import Footer from "./utils/Footer.jsx";
+import ThinkStackIntro from "./utils/ThinkStackIntro.jsx";
+
 function App() {
   const appRouter = createBrowserRouter([
     {
@@ -18,29 +39,114 @@ function App() {
           element: (
             <>
               <HeroSection />
-              <Courses/>
+              <Courses />
+               <ThinkStackIntro />
+              <About/>
+               <Footer />
             </>
           ),
         },
         {
-          path:"login",
-          element:<Login/>
+          path: "login",
+          element: (
+            <AuthenticatedUser>
+              <Login />
+            </AuthenticatedUser>
+          ),
         },
         {
-          path:"my-learning",
-          element:<MyLearning/>
+          path: "my-learning",
+          element: (
+            <ProtectedRoute>
+              <MyLearning />
+            </ProtectedRoute>
+          ),
         },
         {
-          path:"profile",
-          element:<Profile/>
-        }
+          path: "my-learning/course-details/:courseId",
+          element: <CourseDetail />,
+        },
+        {
+          path: "profile",
+          element: (
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "course/search",
+          element: (
+            <ProtectedRoute>
+              <SearchPage />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "course-details/:courseId",
+          element: (
+            <ProtectedRoute>
+              <CourseDetail />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "course-progress/:courseId",
+          element: (
+            <ProtectedRoute>
+              <PurchaseCourseProtectedRoute>
+                <CourseProgress />
+              </PurchaseCourseProtectedRoute>
+            </ProtectedRoute>
+          ),
+        },
+
+        //admin routes start from heree
+
+        {
+          path: "admin",
+          element: (
+            <AdminRoute>
+              <SideBar />
+            </AdminRoute>
+          ),
+          children: [
+            {
+              path: "dashboard",
+              element: <Dashboard />,
+            },
+            {
+              path: "course",
+              element: <CourseTable />,
+            },
+            {
+              path: "course/create",
+              element: <AddCourse />,
+            },
+            {
+              path: "course/:courseId",
+              element: <UpdateCourse />,
+            },
+            {
+              path: "course/:courseId/lecture",
+              element: <CreateLecture />,
+            },
+            {
+              path: "course/:courseId/lecture/:lectureId",
+              element: <UpdateLecture />,
+            },
+          ],
+        },
       ],
     },
   ]);
   return (
     <>
       <main>
-        <RouterProvider router={appRouter}/>
+        <ThemeProvider>
+          <RouterProvider router={appRouter} />
+        </ThemeProvider>
+        
       </main>
     </>
   );
