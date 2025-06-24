@@ -6,7 +6,7 @@ const PurchaseCourseProtectedRoute = ({children}) => {
     const {data, isLoading} = useGetCourseDetailWithStatusQuery(courseId);
 
     if(isLoading) return <p>Loading...</p>
-// console.log(data || "no data")
+
     return data?.purchased ? children : <Navigate to={`/course-details/${courseId}`}/>
 }
 export default PurchaseCourseProtectedRoute;
