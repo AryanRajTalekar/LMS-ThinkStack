@@ -1,6 +1,6 @@
 import React from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import Course from "./Course";
+import CourseCard from "./CourseCard";
 import { useGetPublishedCoursesQuery } from "@/features/api/courseApi";
 
 const Courses = () => {
@@ -28,7 +28,7 @@ const Courses = () => {
                 <CourseSkeleton key={index} />
               ))
             : data?.courses?.map((course, index) => (
-                <Course key={course._id || index} course={course} />
+                <CourseCard key={course._id || index} course={course} />
               ))}
         </div>
       </div>

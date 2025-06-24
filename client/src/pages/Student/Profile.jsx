@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import Course from "./Course";
+import CourseCard from "./CourseCard";
 import {
   useLoadUserQuery,
   useUpdateUserMutation,
@@ -172,7 +172,7 @@ const Profile = () => {
             <h1>You haven't enrolled yet</h1>
           ) : (
             user.enrolledCourses.map((course) => (
-              <Course course={course} key={course._id} />
+              <CourseCard course={course} key={course._id} />
             ))
           )}
         </div>
