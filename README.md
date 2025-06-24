@@ -100,9 +100,3 @@ Cloudinary is configured with secure: true to avoid mixed content issues.
 
 Stripe uses https URLs for success/cancel redirects.
 
-✅ To-Do / Future Features
-
-🟡 User certificates after course completion
-
-
-📸 Screenshots
