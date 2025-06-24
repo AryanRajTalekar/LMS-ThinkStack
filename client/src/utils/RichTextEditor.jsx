@@ -35,7 +35,7 @@ const RichTextEditor = ({ input, setinput }) => {
   if (!editor) return null;
 
   return (
-    <div className="border p-4 rounded-md shadow-md bg-white">
+    <div className="border p-4 rounded-md shadow-md bg-white dark:bg-gray-900 dark:border-gray-700">
       <div className="flex flex-wrap gap-2 mb-4">
         <Button
           variant="outline"
@@ -74,7 +74,10 @@ const RichTextEditor = ({ input, setinput }) => {
         </Button>
       </div>
 
-      <EditorContent editor={editor} className="min-h-[150px] p-2 border rounded-md" />
+      <EditorContent
+        editor={editor}
+        className="min-h-[150px] p-2 border rounded-md bg-white text-black dark:bg-gray-800 dark:text-white dark:border-gray-700"
+      />
     </div>
   );
 };
